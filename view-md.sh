@@ -21,7 +21,7 @@ resolve_editor() {
 
 while true; do
 	"$glow" --pager --style "$style" --width 100 "$file"
-	printf "\n\033[2m[e]\033[0m edit   \033[2m[r]\033[0m re-render   \033[2m[q]\033[0m close   > "
+	printf "\n\033[33m▸ [e]\033[0m edit   \033[33m[r]\033[0m re-render   \033[33m[q]\033[0m close   > "
 	read -r -n 1 action || action=q
 	echo
 	case "${action:-q}" in

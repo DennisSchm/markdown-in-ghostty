@@ -90,7 +90,7 @@
   },
   "code_block": {
     "color": "244",
-    "margin": 4,
+    "margin": 2,
     "chroma": {
       "text": {
         "color": "#C4C4C4"
@@ -178,7 +178,9 @@
       "background": {
         "background_color": "#1d1d1d"
       }
-    }
+    },
+    "block_prefix": "\n",
+    "block_suffix": "\n"
   },
   "table": {},
   "definition_list": {},
