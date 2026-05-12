@@ -45,6 +45,10 @@ Vim motions scroll the rendered content; the action keys dispatch on a single ke
 
 For a GUI editor that returns immediately (e.g. VS Code), use the blocking form: `export EDITOR="code --wait"`.
 
+## Mermaid diagrams
+
+` ```mermaid ` fenced blocks are intercepted at preprocess time: each diagram is rendered to PNG with [`mmdc`](https://github.com/mermaid-js/mermaid-cli) and then to colored Unicode block art with [`chafa`](https://hpjansson.org/chafa/), spliced into the line buffer between glow-rendered chunks. Rendered PNGs are cached by content hash under `~/.cache/markdown-in-ghostty/`, so reopens and resizes only re-run `chafa` (fast), not `mmdc` (slow — it spawns headless Chromium).
+
 ## Layout
 
 ```

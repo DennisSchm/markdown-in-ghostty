@@ -27,8 +27,8 @@ log "Ghostty $GHOSTTY_VERSION detected."
 
 command -v brew >/dev/null || die "Homebrew required. Install from https://brew.sh first."
 
-for pkg in glow duti; do
-	if ! command -v "$pkg" >/dev/null; then
+for pkg in glow duti mermaid-cli chafa; do
+	if ! command -v "${pkg/mermaid-cli/mmdc}" >/dev/null; then
 		log "Installing $pkg via brew..."
 		brew install "$pkg"
 	fi
