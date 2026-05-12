@@ -41,6 +41,11 @@ log "Compiling AppleScript to $APP_PATH ..."
 rm -rf "$APP_PATH"
 osacompile -o "$APP_PATH" "$SCRIPT_DIR/markdown_in_ghostty.applescript"
 
+log "Bundling view-md wrapper and custom glow style into the .app ..."
+RES_DIR="$APP_PATH/Contents/Resources"
+install -m 0755 "$SCRIPT_DIR/view-md.sh"  "$RES_DIR/view-md"
+install -m 0644 "$SCRIPT_DIR/style.json"  "$RES_DIR/style.json"
+
 PLIST="$APP_PATH/Contents/Info.plist"
 PB=/usr/libexec/PlistBuddy
 $PB -c "Add :CFBundleIdentifier string $BUNDLE_ID" "$PLIST"
