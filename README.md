@@ -2,6 +2,14 @@
 
 Cmd-click a `.md` path inside Ghostty and the window splits to the right, rendering the file with [`glow`](https://github.com/charmbracelet/glow) through a small wrapper that lets you toggle between rendered view and your editor.
 
+## Why
+
+CLI-based coding agents have shifted the daily mix away from typing code and toward reading: prompts, design notes, agent output, generated docs, READMEs in other repos. The terminal is the natural home for that workflow — agents stream into it, the file system is one `cd` away, and tmux/Ghostty splits keep everything in one window.
+
+Editor-first tools fight this. `nvim` is built for *editing* a buffer; opening a markdown file just to skim it loads the whole edit-mode machinery for a task that is fundamentally read-only. What's missing is a terminal-native *viewer* that behaves like Cmd-clicking a link in a GUI: a glance, a render, and a way back out — with an `e` escape hatch for the cases where you actually do want to edit.
+
+That's what this is. Cmd-click → rendered split → `q` to close, or `e` to drop into your editor when the read turns into a write.
+
 ## Requirements
 
 - macOS
@@ -20,15 +28,20 @@ The installer is idempotent; re-run it after editing any source file to apply ch
 
 ## In the split
 
-After `glow` exits you get a prompt:
+The split opens directly into the rendered file with a pinned action bar on the bottom row:
 
 ```
-[e] edit   [r] re-render   [q] close   >
+▸ [e] edit  [r] re-render  [q] close  · j/k/gg/G/space/b
 ```
 
-- **e** opens the file in `$EDITOR` (defaults to `nvim`, then `vi`). After the editor exits, the loop returns to the rendered view, so saved edits appear immediately.
-- **r** re-renders without re-opening the editor.
-- **q** (or any other key) closes the split.
+Vim motions scroll the rendered content; the action keys dispatch on a single keypress without leaving the view first:
+
+- **j** / **k** — scroll one line
+- **space** / **b** — page down / page up
+- **gg** / **G** — jump to top / bottom
+- **e** — open the file in `$EDITOR` (defaults to `nvim`, then `vi`). After the editor exits, the view re-renders so saved edits appear immediately.
+- **r** — re-render without opening the editor.
+- **q** — close the split.
 
 For a GUI editor that returns immediately (e.g. VS Code), use the blocking form: `export EDITOR="code --wait"`.
 
@@ -49,7 +62,7 @@ The `.app` lives at `~/Applications/MarkdownInGhostty.app` after install; `view-
 1. `install.sh` installs `glow` and `duti` via Homebrew, compiles `markdown_in_ghostty.applescript` into `~/Applications/MarkdownInGhostty.app`, bundles `view-md.sh` and `style.json` into the app's `Contents/Resources/`, and registers the app via `duti` as the handler for `.md`, `.markdown`, and the `net.daringfireball.markdown` UTI.
 2. When you Cmd-click a `.md` path in Ghostty, macOS routes the file open to the handler app.
 3. The handler uses Ghostty's native AppleScript dictionary (`split <terminal> direction right with configuration <cfg>`) to create a right-side split in the focused window, with `view-md <file> <style.json>` as the split's initial command.
-4. `view-md` runs `glow --pager --style <style.json> --width 100 <file>`, then enters the toggle loop.
+4. `view-md` captures `CLICOLOR_FORCE=1 glow --style <style.json> --width <cols> <file>` into a line buffer, switches to the alternate screen, and runs a small bash pager that handles vim motions, a pinned action bar, and single-keypress dispatch for `e` / `r` / `q`.
 
 Because the script controls the running Ghostty instance via Apple Events, existing tabs and panes are preserved across opens.
 
