@@ -90,10 +90,11 @@
   },
   "code_block": {
     "color": "244",
-    "margin": 2,
+    "margin": 1,
     "chroma": {
       "text": {
-        "color": "#C4C4C4"
+        "color": "#C4C4C4",
+        "background_color": "#3a3a3a"
       },
       "error": {
         "color": "#F1F1F1",
@@ -176,7 +177,7 @@
         "color": "#777777"
       },
       "background": {
-        "background_color": "#1d1d1d"
+        "background_color": "#3a3a3a"
       }
     },
     "block_prefix": "\n",
